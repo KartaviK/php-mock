@@ -1,26 +1,24 @@
 <?php
 
-namespace phpmock;
+namespace Kartavik\PHPMock\Tests;
 
-use phpmock\functions\FixedValueFunction;
+use Kartavik\PHPMock\Exceptions\MockEnabled;
+use Kartavik\PHPMock\Functions\FixedValue;
+use Kartavik\PHPMock\Mock;
+use Kartavik\PHPMock\MockBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Mock's case insensitivity.
  *
  * @author Markus Malkusch <markus@malkusch.de>
- * @link bitcoin:1335STSwu9hST4vcMRppEPgENMHD2r1REK Donations
- * @license http://www.wtfpl.net/txt/copying/ WTFPL
- * @see Mock
  */
-class MockCaseInsensitivityTest extends \PHPUnit_Framework_TestCase
+class MockCaseInsensitivityTest extends TestCase
 {
-    
-    /**
-     * @var Mock
-     */
+    /** @var Mock */
     private $mock;
     
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (isset($this->mock)) {
             $this->mock->disable();
@@ -28,18 +26,15 @@ class MockCaseInsensitivityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $mockName  The mock function name.
-     *
-     * @expectedException phpmock\MockEnabledException
      * @dataProvider provideTestCaseSensitivity
-     * @test
      */
     public function testFailEnable($mockName)
     {
+        $this->expectException(MockEnabled::class);
         $builder = new MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
                 ->setName(strtolower($mockName))
-                ->setFunctionProvider(new FixedValueFunction(1234));
+                ->setFunctionProvider(new FixedValue(1234));
 
         $this->mock = $builder->build();
         $this->mock->enable();
@@ -53,7 +48,6 @@ class MockCaseInsensitivityTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $mockName  The mock function name.
      *
-     * @test
      * @dataProvider provideTestCaseSensitivity
      */
     public function testCaseSensitivity($mockName)
@@ -61,7 +55,7 @@ class MockCaseInsensitivityTest extends \PHPUnit_Framework_TestCase
         $builder = new MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
                 ->setName($mockName)
-                ->setFunctionProvider(new FixedValueFunction(1234));
+                ->setFunctionProvider(new FixedValue(1234));
 
         $this->mock = $builder->build();
         $this->mock->enable();

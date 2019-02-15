@@ -1,42 +1,35 @@
 <?php
 
 // A different namespace
-namespace phpmock\test;
+namespace Kartavik\PHPMock\Tests\test;
 
-use phpmock\Mock;
-use phpmock\MockBuilder;
-use phpmock\functions\FixedValueFunction;
+use Kartavik\PHPMock\Mock;
+use Kartavik\PHPMock\MockBuilder;
+use Kartavik\PHPMock\Functions\FixedValue;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Mock in a different namespace.
  *
  * @author Markus Malkusch <markus@malkusch.de>
- * @link bitcoin:1335STSwu9hST4vcMRppEPgENMHD2r1REK Donations
- * @license http://www.wtfpl.net/txt/copying/ WTFPL
- * @see Mock
  */
-class MockNamespaceTest extends \PHPUnit_Framework_TestCase
+class MockNamespaceTest extends TestCase
 {
-    
-    /**
-     * @var Mock
-     */
+    /** @var Mock */
     private $mock;
     
-    /**
-     * @var MockBuilder
-     */
+    /** @var MockBuilder */
     private $builder;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->builder = new MockBuilder();
         $this->builder
                 ->setName("time")
-                ->setFunctionProvider(new FixedValueFunction(1234));
+                ->setFunctionProvider(new FixedValue(1234));
     }
     
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (! empty($this->mock)) {
             $this->mock->disable();
@@ -45,13 +38,10 @@ class MockNamespaceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests defining mocks in a different namespace.
-     *
-     * @test
      * @dataprovider provideTestNamespace
      * @runInSeparateProcess
      */
-    public function testDefiningNamespaces()
+    public function testDefiningNamespaces(): void
     {
         $this->builder->setNamespace(__NAMESPACE__);
         $this->mock = $this->builder->build();
@@ -61,12 +51,9 @@ class MockNamespaceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests redefining mocks in a different namespace.
-     *
-     * @test
      * @dataprovider provideTestNamespace
      */
-    public function testRedefiningNamespaces()
+    public function testRedefiningNamespaces(): void
     {
         $this->builder->setNamespace(__NAMESPACE__);
         $this->mock = $this->builder->build();
@@ -84,10 +71,10 @@ class MockNamespaceTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [__NAMESPACE__],
-            ['phpmock\test'],
-            ['\phpmock\test'],
-            ['phpmock\test\\'],
-            ['\phpmock\test\\']
+            ['Kartavik\PHPMock\Tests\test'],
+            ['\Kartavik\PHPMock\Tests\test'],
+            ['Kartavik\PHPMock\Tests\test\\'],
+            ['\Kartavik\PHPMock\Tests\test\\']
         ];
     }
 }

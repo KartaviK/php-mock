@@ -95,7 +95,7 @@ object. You can do this with the fluent API of [`MockBuilder`](http://php-mock.g
    * [`FixedValueFunction`](http://php-mock.github.io/php-mock/api/class-phpmock.functions.FixedValueFunction.html)
      is a simple implementation which returns always the same value.
 
-   * [`FixedMicrotimeFunction`](http://php-mock.github.io/php-mock/api/class-phpmock.functions.FixedMicrotimeFunction.html)
+   * [`FixedMicrotime`](http://php-mock.github.io/php-mock/api/class-phpmock.functions.FixedMicrotimeFunction.html)
      is a simple implementation which returns always the same microtime. This
      class is different to `FixedValueFunction` as it contains a converter for
      `microtime()`'s float and string format.
@@ -105,12 +105,12 @@ object. You can do this with the fluent API of [`MockBuilder`](http://php-mock.g
 
    * [`SleepFunction`](http://php-mock.github.io/php-mock/api/class-phpmock.functions.SleepFunction.html)
      is a `sleep()` implementation, which doesn't halt but increases an
-     [`Incrementable`](http://php-mock.github.io/php-mock/api/class-phpmock.functions.Incrementable.html)
+     [`Increment`](http://php-mock.github.io/php-mock/api/class-phpmock.functions.Incrementable.html)
      e.g. a `time()` mock.
 
    * [`UsleepFunction`](http://php-mock.github.io/php-mock/api/class-phpmock.functions.UsleepFunction.html)
      is an `usleep()` implementation, which doesn't halt but increases an
-     `Incrementable` e.g. a `microtime()` mock.
+     `Increment` e.g. a `microtime()` mock.
 
 * [`MockBuilder::build()`](http://php-mock.github.io/php-mock/api/class-phpmock.MockBuilder.html#_build)
   builds a `Mock` object.

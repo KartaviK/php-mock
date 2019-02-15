@@ -2,25 +2,24 @@
 
 namespace foo;
 
-use phpmock\Mock;
-use phpmock\MockBuilder;
-use phpmock\MockRegistry;
-use phpmock\functions\FixedValueFunction;
-use phpmock\environment\SleepEnvironmentBuilder;
+use Kartavik\PHPMock\Mock;
+use Kartavik\PHPMock\MockBuilder;
+use Kartavik\PHPMock\MockRegistry;
+use Kartavik\PHPMock\Functions\FixedValue;
+use Kartavik\PHPMock\Environment\SleepBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the example from the documentation.
  *
  * @author Markus Malkusch <markus@malkusch.de>
- * @link bitcoin:1335STSwu9hST4vcMRppEPgENMHD2r1REK Donations
- * @license http://www.wtfpl.net/txt/copying/ WTFPL
  */
-class ExampleTest extends \PHPUnit_Framework_TestCase
+class ExampleTest extends TestCase
 {
     
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        MockRegistry::getInstance()->unregisterAll();
+        MockRegistry::unregisterAll();
     }
 
     /**
@@ -33,7 +32,7 @@ class ExampleTest extends \PHPUnit_Framework_TestCase
         $builder = new MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
                 ->setName("time")
-                ->setFunction(
+                ->setCallback(
                     function () {
                         return 1234;
                     }
@@ -55,7 +54,7 @@ class ExampleTest extends \PHPUnit_Framework_TestCase
         $builder = new MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
                 ->setName("time")
-                ->setFunctionProvider(new FixedValueFunction(12345));
+                ->setFunctionProvider(new FixedValue(12345));
                     
         $mock = $builder->build();
         $mock->enable();
@@ -70,7 +69,7 @@ class ExampleTest extends \PHPUnit_Framework_TestCase
      */
     public function testExample3()
     {
-        $builder = new SleepEnvironmentBuilder();
+        $builder = new SleepBuilder();
         $builder->addNamespace(__NAMESPACE__)
                 ->setTimestamp(12345);
 
@@ -82,14 +81,10 @@ class ExampleTest extends \PHPUnit_Framework_TestCase
         assert(12345 + 10 == time());
         $this->assertEquals(12345 + 10, time());
     }
-    
-    /**
-     * Tests the example from the documentation.
-     *
-     * @expectedException Exception
-     */
+
     public function testExample4()
     {
+        $this->expectException(\Exception::class);
         $function = function () {
             throw new \Exception();
         };
@@ -101,12 +96,7 @@ class ExampleTest extends \PHPUnit_Framework_TestCase
             $mock->disable();
         }
     }
-    
-    /**
-     * Tests the example from the documentation.
-     *
-     * @test
-     */
+
     public function testExample5()
     {
         $time = new Mock(
@@ -117,6 +107,6 @@ class ExampleTest extends \PHPUnit_Framework_TestCase
             }
         );
         $time->enable();
-        assert(3 == time());
+        $this->assertEquals(3, time());
     }
 }

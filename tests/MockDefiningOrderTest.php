@@ -1,26 +1,21 @@
 <?php
 
-namespace phpmock;
+namespace Kartavik\PHPMock\Tests;
 
-use phpmock\functions\FixedValueFunction;
+use Kartavik\PHPMock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the ordering of the mock creation.
  *
  * @author Markus Malkusch <markus@malkusch.de>
- * @link bitcoin:1335STSwu9hST4vcMRppEPgENMHD2r1REK Donations
- * @license http://www.wtfpl.net/txt/copying/ WTFPL
- * @see Mock
  */
-class MockDefiningOrderTest extends \PHPUnit_Framework_TestCase
+class MockDefiningOrderTest extends TestCase
 {
-
-    /**
-     * @var Mock The mock.
-     */
+    /** @var PHPMock\Mock The mock. */
     private $mock;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (isset($this->mock)) {
             $this->mock->disable();
@@ -50,9 +45,8 @@ class MockDefiningOrderTest extends \PHPUnit_Framework_TestCase
      * documentation can be updated.
      *
      * @link https://bugs.php.net/bug.php?id=68541 Bug #68541
-     * @test
      */
-    public function testDefineBeforeFirstCallRestriction()
+    public function testDefineBeforeFirstCallRestriction(): void
     {
         /*
          * HHVM did fix this bug already.
@@ -69,10 +63,10 @@ class MockDefiningOrderTest extends \PHPUnit_Framework_TestCase
         
         self::escapeshellcmd("foo");
         
-        $builder = new MockBuilder();
+        $builder = new PHPMock\MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
                 ->setName("escapeshellcmd")
-                ->setFunctionProvider(new FixedValueFunction("foo"));
+                ->setFunctionProvider(new PHPMock\Functions\FixedValue("foo"));
         
         $this->mock = $builder->build();
         $this->mock->enable();
@@ -93,10 +87,10 @@ class MockDefiningOrderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(function_exists($function));
         highlight_string("foo", true);
 
-        $builder = new MockBuilder();
+        $builder = new PHPMock\MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
                 ->setName("highlight_string")
-                ->setFunctionProvider(new FixedValueFunction("bar"));
+                ->setFunctionProvider(new PHPMock\Functions\FixedValue("bar"));
 
         $this->mock = $builder->build();
         $this->mock->enable();
@@ -116,10 +110,10 @@ class MockDefiningOrderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(function_exists($function));
         \str_word_count("foo");
 
-        $builder = new MockBuilder();
+        $builder = new PHPMock\MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
                 ->setName("str_word_count")
-                ->setFunctionProvider(new FixedValueFunction("bar"));
+                ->setFunctionProvider(new PHPMock\Functions\FixedValue("bar"));
 
         $this->mock = $builder->build();
         $this->mock->enable();

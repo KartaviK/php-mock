@@ -28,7 +28,7 @@ $time = time(); // This call can be mocked, a call to \time() can't.
 * The mock has to be defined before the first call to the unqualified function
   in the tested class. This is documented in [Bug #68541](https://bugs.php.net/bug.php?id=68541).
   In most cases, you can ignore this restriction but if you happen to run into
-  this issue you can call [=`Mock::define()`=
+  this issue you can call `Mock::define()`
   before that first call. This would define a side effectless namespaced
   function which can be enabled later. Another effective
   approach is running your test in an isolated process.

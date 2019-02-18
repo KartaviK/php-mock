@@ -13,76 +13,61 @@ use PHPUnit\Framework\TestCase;
  * Tests the example from the documentation.
  *
  * @author Markus Malkusch <markus@malkusch.de>
+ * @author Roman Varkuta <roman.varkuta@gmail.com>
  */
 class ExampleTest extends TestCase
 {
-    
     protected function tearDown(): void
     {
         MockRegistry::unregisterAll();
     }
 
-    /**
-     * Tests the example from the documentation.
-     *
-     * @test
-     */
-    public function testExample1()
+    public function testExample1(): void
     {
         $builder = new MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
-                ->setName("time")
-                ->setCallback(
-                    function () {
-                        return 1234;
-                    }
-                );
-                    
+            ->setName("time")
+            ->setCallback(
+                function () {
+                    return 1234;
+                }
+            );
+
         $mock = $builder->build();
         $mock->enable();
         assert(time() == 1234);
         $this->assertEquals(1234, time());
     }
 
-    /**
-     * Tests the example from the documentation.
-     *
-     * @test
-     */
-    public function testExample2()
+    public function testExample2(): void
     {
         $builder = new MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
-                ->setName("time")
-                ->setFunctionProvider(new FixedValue(12345));
-                    
+            ->setName("time")
+            ->setFunctionProvider(new FixedValue(12345));
+
         $mock = $builder->build();
         $mock->enable();
         assert(time() == 12345);
         $this->assertEquals(12345, time());
     }
 
-    /**
-     * Tests the example from the documentation.
-     *
-     * @test
-     */
-    public function testExample3()
+    public function testExample3(): void
     {
         $builder = new SleepBuilder();
         $builder->addNamespace(__NAMESPACE__)
-                ->setTimestamp(12345);
+            ->setTimestamp(12345);
 
         $environment = $builder->build();
         $environment->enable();
-        
+
         sleep(10);
 
         assert(12345 + 10 == time());
         $this->assertEquals(12345 + 10, time());
     }
 
-    public function testExample4()
+    public function testExample4(): void
     {
         $this->expectException(\Exception::class);
         $function = function () {
@@ -97,7 +82,7 @@ class ExampleTest extends TestCase
         }
     }
 
-    public function testExample5()
+    public function testExample5(): void
     {
         $time = new Mock(
             __NAMESPACE__,

@@ -7,6 +7,9 @@
     <filter>
         <whitelist>
             <directory suffix=".php">src</directory>
+            <exclude>
+                <directory suffix=".php">src/Helper</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>

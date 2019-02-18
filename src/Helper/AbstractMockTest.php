@@ -1,6 +1,6 @@
 <?php
 
-namespace Kartavik\PHPMock\Tests;
+namespace Kartavik\PHPMock\Helper;
 
 use Kartavik\PHPMock\Exceptions\MockEnabled;
 use PHPUnit\Framework\TestCase;
@@ -9,10 +9,18 @@ use PHPUnit\Framework\TestCase;
  * Common tests for mocks.
  *
  * @author Markus Malkusch <markus@malkusch.de>
+ * @author Roman Varkuta <roman.varkuta@gmail.com>
  */
 abstract class AbstractMockTest extends TestCase
 {
-    abstract protected function disableMocks();
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->disableMocks();
+    }
+
+    abstract protected function disableMocks(): void;
 
     /**
      * Builds an enabled function mock.
@@ -21,7 +29,7 @@ abstract class AbstractMockTest extends TestCase
      * @param string $functionName The function name.
      * @param callable $function The function mock.
      */
-    abstract protected function mockFunction($namespace, $functionName, callable $function);
+    abstract protected function mockFunction(string $namespace, string $functionName, callable $function): void;
 
     /**
      * Defines the function mock.
@@ -29,21 +37,12 @@ abstract class AbstractMockTest extends TestCase
      * @param string $namespace The namespace.
      * @param string $functionName The function name.
      */
-    abstract protected function defineFunction($namespace, $functionName);
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->disableMocks();
-    }
+    abstract protected function defineFunction(string $namespace, string $functionName);
 
     /**
      * Tests mocking a function without parameters.
-     *
-     * @test
      */
-    public function testMockFunctionWithoutParameters()
+    public function testMockFunctionWithoutParameters(): void
     {
         $this->mockFunction(__NAMESPACE__, "getmyuid", function () {
             return 1234;
@@ -54,10 +53,9 @@ abstract class AbstractMockTest extends TestCase
     /**
      * Tests mocking a previously mocked function again.
      *
-     * @test
      * @depends testMockFunctionWithoutParameters
      */
-    public function testRedefine()
+    public function testRedefine(): void
     {
         $this->mockFunction(__NAMESPACE__, "getmyuid", function () {
             return 5;
@@ -67,10 +65,8 @@ abstract class AbstractMockTest extends TestCase
 
     /**
      * Tests mocking a function without parameters.
-     *
-     * @test
      */
-    public function testMockFunctionWithParameters()
+    public function testMockFunctionWithParameters(): void
     {
         $this->mockFunction(__NAMESPACE__, "rand", function ($min, $max) {
             return $max;
@@ -80,10 +76,8 @@ abstract class AbstractMockTest extends TestCase
 
     /**
      * Tests mocking of an undefined function.
-     *
-     * @test
      */
-    public function testUndefinedFunction()
+    public function testUndefinedFunction(): void
     {
         $this->assertFalse(function_exists("testUndefinedFunction"));
         $this->mockFunction(__NAMESPACE__, "testUndefinedFunction", function ($arg) {
@@ -93,7 +87,7 @@ abstract class AbstractMockTest extends TestCase
         $this->assertEquals(2, $result);
     }
 
-    public function testFailEnable()
+    public function testFailEnable(): void
     {
         $this->expectException(MockEnabled::class);
         $name = "testFailEnable";
@@ -101,7 +95,7 @@ abstract class AbstractMockTest extends TestCase
         $this->mockFunction(__NAMESPACE__, $name, "sqrt");
     }
 
-    public function testPassingByValue()
+    public function testPassingByValue(): void
     {
         $this->mockFunction(__NAMESPACE__, "testPassingByValue", function ($a) {
             return $a + 1;
@@ -111,7 +105,7 @@ abstract class AbstractMockTest extends TestCase
         $this->assertEquals(3, testPassingByValue(2));
     }
 
-    public function testPassingByReference()
+    public function testPassingByReference(): void
     {
         $this->mockFunction(__NAMESPACE__, "exec", function ($a, &$b, &$c) {
             $a = "notExpected";
@@ -131,7 +125,7 @@ abstract class AbstractMockTest extends TestCase
         $this->assertEquals("expected", $noReference);
     }
 
-    public function testPreserveArgumentDefaultValue()
+    public function testPreserveArgumentDefaultValue(): void
     {
         $functionName = $this->buildPrivateFunctionName("testPreserveArgumentDefaultValue");
 
@@ -157,14 +151,14 @@ abstract class AbstractMockTest extends TestCase
     /**
      * @depends testPreserveArgumentDefaultValue
      */
-    public function testResetToDefaultArgumentOfOriginalFunction()
+    public function testResetToDefaultArgumentOfOriginalFunction(): void
     {
         $functionName = $this->buildPrivateFunctionName("testPreserveArgumentDefaultValue");
         $result = $functionName();
         $this->assertEquals("default", $result);
     }
 
-    public function testCVariadic()
+    public function testCVariadic(): void
     {
         $this->mockFunction(__NAMESPACE__, "min", "max");
 
@@ -175,13 +169,13 @@ abstract class AbstractMockTest extends TestCase
     /**
      * @depends testCVariadic
      */
-    public function testCVariadicReset()
+    public function testCVariadicReset(): void
     {
         $this->assertEquals(1, min(2, 1));
         $this->assertEquals(1, min([2, 1]));
     }
 
-    public function testDisableSetup()
+    public function testDisableSetup(): void
     {
         $this->mockFunction(__NAMESPACE__, "rand", function () {
             return 1234;
@@ -196,13 +190,13 @@ abstract class AbstractMockTest extends TestCase
     /**
      * @depends testDisableSetup
      */
-    public function testDisable()
+    public function testDisable(): void
     {
         $this->assertNotEquals(1234, rand());
         $this->assertNotEquals(1234, mt_rand());
     }
 
-    public function testImplicitDefine()
+    public function testImplicitDefine(): void
     {
         $functionName = $this->buildPrivateFunctionName("testDefine");
         $fqfn = __NAMESPACE__ . "\\$functionName";
@@ -211,7 +205,7 @@ abstract class AbstractMockTest extends TestCase
         $this->assertTrue(function_exists($fqfn));
     }
 
-    public function testExplicitDefine()
+    public function testExplicitDefine(): void
     {
         $this->defineFunction(__NAMESPACE__, "escapeshellcmd");
         $this->escapeshellcmd("foo");
@@ -223,7 +217,7 @@ abstract class AbstractMockTest extends TestCase
         $this->assertEquals("bar", self::escapeshellcmd("foo"));
     }
 
-    private function escapeshellcmd($command)
+    private function escapeshellcmd($command): string
     {
         return escapeshellcmd($command);
     }
@@ -237,34 +231,23 @@ abstract class AbstractMockTest extends TestCase
      * @backupStaticAttributes enabled
      * @dataProvider provideTestBackupStaticAttributes
      */
-    public function testBackupStaticAttributes()
+    public function testBackupStaticAttributes(): void
     {
         $this->mockFunction(__NAMESPACE__, "testBackupStaticAttributes", "sqrt");
         $this->assertEquals(2, testBackupStaticAttributes(4));
     }
 
-    public function provideTestBackupStaticAttributes()
+    public function provideTestBackupStaticAttributes(): \Traversable
     {
-        return [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ];
+        foreach (\range(0, 11) as $i) {
+            yield [];
+        }
     }
 
     /**
      * @runInSeparateProcess
      */
-    public function testRunInSeparateProcess()
+    public function testRunInSeparateProcess(): void
     {
         $this->mockFunction(__NAMESPACE__, "time", function () {
             return 123;

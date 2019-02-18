@@ -32,14 +32,14 @@ class AbstractSleepFunctionTest extends TestCase
         PHPMock\Functions\AbstractSleep $sleepFunction,
         $amount,
         $expected
-    ) {
+    ): void {
         $value = new PHPMock\Functions\FixedValue(0);
         $sleepFunction->addIncrements($value);
         call_user_func($sleepFunction->getClosure(), $amount);
         $this->assertEquals($expected, call_user_func($value->getClosure()));
     }
 
-    public function provideTestSleepIncrementation()
+    public function provideTestSleepIncrementation(): array
     {
         return [
             [new PHPMock\Functions\Sleep(), 1, 1],

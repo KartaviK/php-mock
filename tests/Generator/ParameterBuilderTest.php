@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
  * Tests ParameterBuilder.
  *
  * @author Markus Malkusch <markus@malkusch.de>
+ * @author Roman Varkuta <roman.varkuta@gmail.com>
  */
 class ParameterBuilderTest extends TestCase
 {
@@ -21,9 +22,8 @@ class ParameterBuilderTest extends TestCase
      * @param string $function The function name.
      *
      * @dataProvider provideTestBuild
-     * @test
      */
-    public function testBuild($expectedSignature, $expectedBody, $function)
+    public function testBuild($expectedSignature, $expectedBody, $function): void
     {
         $builder = new ParameterBuilder();
         $builder->build($function);
@@ -31,12 +31,7 @@ class ParameterBuilderTest extends TestCase
         $this->assertEquals($expectedBody, $builder->getBodyParameters());
     }
 
-    /**
-     * Returns test cases for testBuild().
-     *
-     * @return string[][][] The test cases.
-     */
-    public function provideTestBuild()
+    public function provideTestBuild(): array
     {
         // @codingStandardsIgnoreStart
 

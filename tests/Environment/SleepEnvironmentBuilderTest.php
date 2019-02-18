@@ -31,12 +31,7 @@ class SleepEnvironmentBuilderTest extends TestCase
         $this->environment->disable();
     }
 
-    /**
-     * Tests mocking functions accross several namespaces.
-     *
-     * @test
-     */
-    public function testAddNamespace()
+    public function testAddNamespace(): void
     {
         $builder = new Environment\SleepBuilder();
         $builder->addNamespace(__NAMESPACE__)
@@ -55,12 +50,7 @@ class SleepEnvironmentBuilderTest extends TestCase
         $this->assertEquals(2 * 123 + $time, \testAddNamespace\time());
     }
 
-    /**
-     * Tests sleep()
-     *
-     * @test
-     */
-    public function testSleep()
+    public function testSleep(): void
     {
         $time = time();
         $microtime = microtime(true);
@@ -72,14 +62,11 @@ class SleepEnvironmentBuilderTest extends TestCase
     }
 
     /**
-     * Tests usleep()
-     *
      * @param int $microseconds Microseconds.
      *
-     * @test
      * @dataProvider provideTestUsleep
      */
-    public function testUsleep($microseconds)
+    public function testUsleep($microseconds): void
     {
         $time = time();
         $microtime = microtime(true);
@@ -91,12 +78,7 @@ class SleepEnvironmentBuilderTest extends TestCase
         $this->assertEquals($microtime + $delta, microtime(true));
     }
 
-    /**
-     * Returns test cases for testUsleep().
-     *
-     * @return int[][] Test cases.
-     */
-    public function provideTestUsleep()
+    public function provideTestUsleep(): array
     {
         return [
             [1000],
@@ -105,12 +87,7 @@ class SleepEnvironmentBuilderTest extends TestCase
         ];
     }
 
-    /**
-     * Tests date()
-     *
-     * @test
-     */
-    public function testDate()
+    public function testDate(): void
     {
         $time = time();
         sleep(100);

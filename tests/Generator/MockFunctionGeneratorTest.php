@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
  * Tests MockFunction.
  *
  * @author Markus Malkusch <markus@malkusch.de>
+ * @author Roman Varkuta <roman.varkuta@gmail.com>
  */
 class MockFunctionGeneratorTest extends TestCase
 {
@@ -18,10 +19,9 @@ class MockFunctionGeneratorTest extends TestCase
      * @param array $expected The expected result.
      * @param array $arguments The input arguments.
      *
-     * @test
      * @dataProvider provideTestRemoveDefaultArguments
      */
-    public function testRemoveDefaultArguments(array $expected, array $arguments)
+    public function testRemoveDefaultArguments(array $expected, array $arguments): void
     {
         MockFunction::removeDefaultArguments($arguments);
         $this->assertEquals($expected, $arguments);

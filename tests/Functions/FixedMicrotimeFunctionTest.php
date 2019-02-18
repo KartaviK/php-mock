@@ -13,21 +13,21 @@ use PHPUnit\Framework\TestCase;
  */
 class FixedMicrotimeFunctionTest extends TestCase
 {
-    public function testSetMicrotime()
+    public function testSetMicrotime(): void
     {
         $function = new PHPMock\Functions\FixedMicrotime();
         $function->setMicrotime("0.00000001 1");
         $this->assertEquals("0.00000001 1", $function->getMicrotime());
     }
 
-    public function testSetMicrotimeAsFloat()
+    public function testSetMicrotimeAsFloat(): void
     {
         $function = new PHPMock\Functions\FixedMicrotime();
         $function->setMicrotimeAsFloat(1.00000001);
         $this->assertEquals(1.00000001, $function->getMicrotime(true));
     }
 
-    public function testGetMicrotime()
+    public function testGetMicrotime(): void
     {
         $function = new PHPMock\Functions\FixedMicrotime();
         $function->setMicrotimeAsFloat(1.00000001);
@@ -35,7 +35,7 @@ class FixedMicrotimeFunctionTest extends TestCase
         $this->assertEquals("0.00000001 1", $function->getMicrotime());
     }
 
-    public function testGetCallable()
+    public function testGetCallable(): void
     {
         $function = new PHPMock\Functions\FixedMicrotime();
         $function->setMicrotimeAsFloat(1.00000001);
@@ -53,7 +53,7 @@ class FixedMicrotimeFunctionTest extends TestCase
         $mock->disable();
     }
 
-    public function testConstructCurrentTime()
+    public function testConstructCurrentTime(): void
     {
         $function = new PHPMock\Functions\FixedMicrotime();
 
@@ -64,13 +64,13 @@ class FixedMicrotimeFunctionTest extends TestCase
     /**
      * @dataProvider provideTestConstructFailsForInvalidArgument
      */
-    public function testConstructFailsForInvalidArgument($timestamp)
+    public function testConstructFailsForInvalidArgument($timestamp): void
     {
         $this->expectException(\InvalidArgumentException::class);
         new PHPMock\Functions\FixedMicrotime($timestamp);
     }
 
-    public function provideTestConstructFailsForInvalidArgument()
+    public function provideTestConstructFailsForInvalidArgument(): array
     {
         return [
             [true],
@@ -81,7 +81,7 @@ class FixedMicrotimeFunctionTest extends TestCase
     /**
      * @dataProvider provideTestConstruct
      */
-    public function testConstruct($timestamp, $expected)
+    public function testConstruct($timestamp, $expected): void
     {
         $function = new PHPMock\Functions\FixedMicrotime($timestamp);
 

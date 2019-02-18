@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FixedDateFunctionTest extends TestCase
 {
-    public function testGetDate()
+    public function testGetDate(): void
     {
         $function = new FixedDate(strtotime("2013-3-3"));
         $this->assertEquals("3. 3. 2013", call_user_func($function->getClosure(), "j. n. Y"));

@@ -11,7 +11,7 @@
     "TDD",
     "BDD"
   ],
-  "license": "MIT",
+  "license": "WTFPL",
   "authors": [
     {
       "name": "Markus Malkusch",
@@ -51,6 +51,6 @@
     "test": "phpunit"
   },
   "suggest": {
-    "php-mock/php-mock-phpunit": "Allows integration into PHPUnit testcase with the trait PHPMock."
+    "kartavik/php-mock-phpunit": "Allows integration into PHPUnit testcase with the trait PHPMock."
   }
 }

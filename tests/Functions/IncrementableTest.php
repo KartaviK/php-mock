@@ -22,7 +22,6 @@ class IncrementableTest extends TestCase
      * @param IncrementInterface $incrementable The tested Increment.
      * @param callable $getValue The lambda for getting the value.
      *
-     * @test
      * @dataProvider provideTestIncrement
      */
     public function testIncrement(
@@ -30,17 +29,12 @@ class IncrementableTest extends TestCase
         $increment,
         IncrementInterface $incrementable,
         callable $getValue
-    ) {
+    ): void {
         $incrementable->increment($increment);
         $this->assertEquals($expected, $getValue($incrementable));
     }
 
-    /**
-     * Test cases for testIncrement().
-     *
-     * @return array Test cases.
-     */
-    public function provideTestIncrement()
+    public function provideTestIncrement(): array
     {
         $getFixedValue = function (Functions\FixedValue $function) {
             return call_user_func($function->getClosure());

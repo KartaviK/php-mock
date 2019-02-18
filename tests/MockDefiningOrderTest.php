@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
  * Tests the ordering of the mock creation.
  *
  * @author Markus Malkusch <markus@malkusch.de>
+ * @author Roman Varkuta <roman.varkuta@gmail.com>
  */
 class MockDefiningOrderTest extends TestCase
 {
@@ -21,7 +22,7 @@ class MockDefiningOrderTest extends TestCase
             $this->mock->disable();
         }
     }
-    
+
     /**
      * Returns the built-in call to escapeshellcmd().
      *
@@ -29,7 +30,7 @@ class MockDefiningOrderTest extends TestCase
      *
      * @return string The built-in call.
      */
-    private static function escapeshellcmd($command)
+    private static function escapeshellcmd($command): string
     {
         return escapeshellcmd($command);
     }
@@ -57,17 +58,17 @@ class MockDefiningOrderTest extends TestCase
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped();
         }
-        
+
         $function = __NAMESPACE__ . '\escapeshellcmd';
         $this->assertFalse(function_exists($function));
-        
+
         self::escapeshellcmd("foo");
-        
+
         $builder = new PHPMock\MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
-                ->setName("escapeshellcmd")
-                ->setFunctionProvider(new PHPMock\Functions\FixedValue("foo"));
-        
+            ->setName("escapeshellcmd")
+            ->setFunctionProvider(new PHPMock\Functions\FixedValue("foo"));
+
         $this->mock = $builder->build();
         $this->mock->enable();
 
@@ -76,12 +77,7 @@ class MockDefiningOrderTest extends TestCase
         $this->assertEquals("bar", self::escapeshellcmd("bar"));
     }
 
-    /**
-     * Tests defining the mock after calling the unqualified function name.
-     *
-     * @test
-     */
-    public function testDefiningAfterCallingUnqualified()
+    public function testDefiningAfterCallingUnqualified(): void
     {
         $function = __NAMESPACE__ . '\highlight_string';
         $this->assertFalse(function_exists($function));
@@ -89,8 +85,8 @@ class MockDefiningOrderTest extends TestCase
 
         $builder = new PHPMock\MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
-                ->setName("highlight_string")
-                ->setFunctionProvider(new PHPMock\Functions\FixedValue("bar"));
+            ->setName("highlight_string")
+            ->setFunctionProvider(new PHPMock\Functions\FixedValue("bar"));
 
         $this->mock = $builder->build();
         $this->mock->enable();
@@ -99,12 +95,7 @@ class MockDefiningOrderTest extends TestCase
         $this->assertEquals("bar", highlight_string("foo"));
     }
 
-    /**
-     * Tests defining the mock after calling the qualified function name.
-     *
-     * @test
-     */
-    public function testDefiningAfterCallingQualified()
+    public function testDefiningAfterCallingQualified(): void
     {
         $function = __NAMESPACE__ . '\str_word_count';
         $this->assertFalse(function_exists($function));
@@ -112,8 +103,8 @@ class MockDefiningOrderTest extends TestCase
 
         $builder = new PHPMock\MockBuilder();
         $builder->setNamespace(__NAMESPACE__)
-                ->setName("str_word_count")
-                ->setFunctionProvider(new PHPMock\Functions\FixedValue("bar"));
+            ->setName("str_word_count")
+            ->setFunctionProvider(new PHPMock\Functions\FixedValue("bar"));
 
         $this->mock = $builder->build();
         $this->mock->enable();

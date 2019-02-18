@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
  * Tests MicrotimeConverter.
  *
  * @author Markus Malkusch <markus@malkusch.de>
+ * @author Roman Varkuta <roman.varkuta@gmail.com>
  */
 class MicrotimeConverterTest extends TestCase
 {
@@ -18,10 +19,9 @@ class MicrotimeConverterTest extends TestCase
      * @param float $float The timestamp.
      * @param string $string The timestamp.
      *
-     * @test
      * @dataProvider provideFloatAndStrings
      */
-    public function testConvertStringToFloat($float, $string)
+    public function testConvertStringToFloat($float, $string): void
     {
         $converter = new MicrotimeConverter();
         $this->assertEquals($float, $converter->convertStringToFloat($string));
@@ -33,21 +33,15 @@ class MicrotimeConverterTest extends TestCase
      * @param float $float The timestamp.
      * @param string $string The timestamp.
      *
-     * @test
      * @dataProvider provideFloatAndStrings
      */
-    public function testConvertFloatToString($float, $string)
+    public function testConvertFloatToString($float, $string): void
     {
         $converter = new MicrotimeConverter();
         $this->assertEquals($string, $converter->convertFloatToString($float));
     }
 
-    /**
-     * Returns convert test cases.
-     *
-     * @return array
-     */
-    public function provideFloatAndStrings()
+    public function provideFloatAndStrings(): array
     {
         return [
             [1.0, "0.00000000 1"],

@@ -12,26 +12,27 @@ use PHPUnit\Framework\TestCase;
  * Tests Mock in a different namespace.
  *
  * @author Markus Malkusch <markus@malkusch.de>
+ * @author Roman Varkuta <roman.varkuta@gmail.com>
  */
 class MockNamespaceTest extends TestCase
 {
     /** @var Mock */
     private $mock;
-    
+
     /** @var MockBuilder */
     private $builder;
-    
+
     protected function setUp(): void
     {
         $this->builder = new MockBuilder();
         $this->builder
-                ->setName("time")
-                ->setFunctionProvider(new FixedValue(1234));
+            ->setName("time")
+            ->setFunctionProvider(new FixedValue(1234));
     }
-    
+
     protected function tearDown(): void
     {
-        if (! empty($this->mock)) {
+        if (!empty($this->mock)) {
             $this->mock->disable();
             unset($this->mock);
         }
@@ -46,7 +47,7 @@ class MockNamespaceTest extends TestCase
         $this->builder->setNamespace(__NAMESPACE__);
         $this->mock = $this->builder->build();
         $this->mock->enable();
-        
+
         $this->assertEquals(1234, time());
     }
 
@@ -58,16 +59,11 @@ class MockNamespaceTest extends TestCase
         $this->builder->setNamespace(__NAMESPACE__);
         $this->mock = $this->builder->build();
         $this->mock->enable();
-        
+
         $this->assertEquals(1234, time());
     }
-    
-    /**
-     * Provides namespaces for testNamespace().
-     *
-     * @return string[][] Namespaces.
-     */
-    public function provideTestNamespace()
+
+    public function provideTestNamespace(): array
     {
         return [
             [__NAMESPACE__],
